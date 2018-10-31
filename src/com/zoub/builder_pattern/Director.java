@@ -1,4 +1,4 @@
-package com.zoub.builder_parttern;
+package com.zoub.builder_pattern;
 
 public class Director {
     private Builder mBuilder = null;

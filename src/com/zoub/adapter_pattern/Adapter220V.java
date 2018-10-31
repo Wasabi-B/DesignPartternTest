@@ -1,4 +1,4 @@
-package com.zoub.adapter_parttern;
+package com.zoub.adapter_pattern;
 
 /**
  * 适配器类 (类适配器模式，与原类是继承关系)

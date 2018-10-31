@@ -1,4 +1,4 @@
-package com.zoub.adapter_parttern;
+package com.zoub.adapter_pattern;
 
 public class AdapterParttern {
 

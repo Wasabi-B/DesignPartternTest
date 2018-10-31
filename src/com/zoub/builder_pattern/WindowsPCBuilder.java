@@ -1,6 +1,4 @@
-package com.zoub.builder_parttern;
-
-import com.sun.java.swing.plaf.windows.WindowsButtonUI;
+package com.zoub.builder_pattern;
 
 public class WindowsPCBuilder {
 

@@ -1,4 +1,4 @@
-package com.zoub.singleton_parttern;
+package com.zoub.singleton_pattern;
 
 public enum SingletonEnum {
     INSTANCE;

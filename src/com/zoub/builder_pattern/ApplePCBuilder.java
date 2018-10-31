@@ -1,4 +1,4 @@
-package com.zoub.builder_parttern;
+package com.zoub.builder_pattern;
 
 public class ApplePCBuilder extends Builder {
 

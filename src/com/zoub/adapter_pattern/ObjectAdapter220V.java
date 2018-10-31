@@ -1,4 +1,4 @@
-package com.zoub.adapter_parttern;
+package com.zoub.adapter_pattern;
 
 /**
  * 对象的适配器模式

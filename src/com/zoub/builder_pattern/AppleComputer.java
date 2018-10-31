@@ -1,4 +1,4 @@
-package com.zoub.builder_parttern;
+package com.zoub.builder_pattern;
 
 /**
  * 具体产品类

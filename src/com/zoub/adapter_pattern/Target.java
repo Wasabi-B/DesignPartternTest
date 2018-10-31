@@ -1,4 +1,4 @@
-package com.zoub.adapter_parttern;
+package com.zoub.adapter_pattern;
 
 /**
  * Target接口（期望得到的接口）：能输出110V(将220V转换成110V)
