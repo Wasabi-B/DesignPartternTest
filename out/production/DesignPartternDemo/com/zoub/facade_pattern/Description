@@ -1,0 +1,176 @@
+一、外环模式概述
+1.定义
+外观模式（Facade Pattern）：外部与一个子系统的通信必须通过一个统一的外观对象进行，为子系统中的一组
+接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这个子系统更加容易使用。外观模式又称为
+门面模式，它是一种对象结构型模式。
+
+2.定义阐述
+
+医院的例子
+
+现代的软件系统都比较复杂的，设计师处理复杂系统的一个常见方法便是将其“分而治之”，把一个系统
+划分为几个较小的子系统。按照部门职能，这个系统可以划分为挂号、门诊、划价、化验、收费、取药等。
+看病的病人要与这些部门打交道，就如同一个子系统的客户端与一个子系统的各个类打交道一样，不是一件
+容易的事情。
+
+首先病人必须先挂号，然后门诊。如果医生要求化验，病人必须首先划价，然后缴费，才可以到化验部门做
+化验。化验后再回到门诊室。
+
+解决这种不便的方法便是引进外观模式，医院可以设置一个接待员的位置，由接待员负责代为挂号、划价、
+缴费、取药等。这个接待员就是外观模式的体现，病人只接触接待员，由接待员与各个部门打交道。
+
+二、外观模式结构
+●　　**外观(Facade)角色 ：**客户端可以调用这个角色的方法。此角色知晓相关的（一个或者多个）子系统
+的功能和责任。在正常情况下，本角色会将所有从客户端发来的请求委派到相应的子系统去。
+
+●　　**子系统(SubSystem)角色 ：**可以同时有一个或者多个子系统。每个子系统都不是一个单独的类，
+而是一个类的集合（如上面的子系统就是由ModuleA、ModuleB、ModuleC三个类组合而成）。每个子系统都可以
+被客户端直接调用，或者被门面角色调用。子系统并不知道门面的存在，对于子系统而言，门面仅仅是另外
+一个客户端而已。
+
+三、外观模式的扩展
+使用外观模式还有一个附带的好处，就是能够有选择性地暴露方法。一个模块中定义的方法可以分成两部分，
+一部分是给子系统外部使用的，一部分是子系统内部模块之间相互调用时使用的。有了Facade类，那么用于子
+系统内部模块之间相互调用的方法就不用暴露给子系统外部了。
+
+一个系统可以有几个外观类
+在外观模式中，通常只需要一个外观类，并且此外观类只有一个实例，换言之它是一个单例类。当然这并不意味着在
+整个系统里只有一个外观类，而仅仅是说对每一个子系统只有一个外观类。或者说，如果一个系统有好几个子系统的
+话，每一个子系统都有一个外观类，整个系统可以有数个外观类。
+
+为子系统增加新行为
+初学者往往以为通过继承一个外观类便可在子系统中加入新的行为，这是错误的。外观模式的用意是为子系统提
+供一个集中化和简化的沟通管道，而不能向子系统加入新的行为。比如医院中的接待员并不是医护人员，接待员
+并不能为病人提供医疗服务。
+
+四、外观模式的实例
+1.实例说明
+某软件公司欲开发一个可应用于多个软件的文件加密模块，该模块可以对文件中的数据进行加密并将加密之后的数据存储在一个新文件中，具体的流程包括三个部分，分别是读取源文件、加密、保存加密之后的文件，其中，读取文件和保存文件使用流来实现，加密操作通过求模运算实现。这三个操作相对独立，为了实现代码的独立重用，让设计更符合单一职责原则，这三个操作的业务代码封装在三个不同的类中。
+
+2.实例类图
+
+
+EncryptFacade充当外观类，FileReader、CipherMachine和FileWriter充当子系统类。
+
+3.实例代码
+FileReader：文件读取类，充当子系统类。
+
+class FileReader
+    {
+        public string Read(string fileNameSrc)
+        {
+       Console.Write("读取文件，获取明文：");
+            FileStream fs = null;
+            StringBuilder sb = new StringBuilder();
+       try
+            {
+                fs = new FileStream(fileNameSrc, FileMode.Open);
+                int data;
+               while((data = fs.ReadByte())!= -1)
+                {
+            sb = sb.Append((char)data);
+               }
+               fs.Close();
+               Console.WriteLine(sb.ToString());
+       }
+       catch(FileNotFoundException e)
+            {
+           Console.WriteLine("文件不存在！");
+       }
+       catch(IOException e)
+            {
+           Console.WriteLine("文件操作错误！");
+       }
+       return sb.ToString();
+        }
+    }
+CipherMachine：数据加密类，充当子系统类。
+
+class CipherMachine
+    {
+       public string Encrypt(string plainText)
+       {
+       Console.Write("数据加密，将明文转换为密文：");
+       string es = "";
+            char[] chars = plainText.ToCharArray();
+       foreach(char ch in chars)
+            {
+                string c = (ch % 7).ToString();
+           es += c;
+       }
+            Console.WriteLine(es);
+       return es;
+    }
+    }
+FileWriter：文件保存类，充当子系统类。
+
+class FileWriter
+    {
+        public void Write(string encryptStr,string fileNameDes)
+        {
+       Console.WriteLine("保存密文，写入文件。");
+            FileStream fs = null;
+       try
+            {
+               fs = new FileStream(fileNameDes, FileMode.Create);
+                byte[] str = Encoding.Default.GetBytes(encryptStr);
+                fs.Write(str,0,str.Length);
+                fs.Flush();
+               fs.Close();
+       }
+       catch(FileNotFoundException e)
+            {
+        Console.WriteLine("文件不存在！");
+       }
+       catch(IOException e)
+            {
+                Console.WriteLine(e.Message);
+           Console.WriteLine("文件操作错误！");
+       }
+        }
+    }
+EncryptFacade：加密外观类，充当外观类。
+
+class EncryptFacade
+    {
+        //维持对其他对象的引用
+         private FileReader reader;
+        private CipherMachine cipher;
+        private FileWriter writer;
+
+        public EncryptFacade()
+        {
+            reader = new FileReader();
+            cipher = new CipherMachine();
+            writer = new FileWriter();
+        }
+
+        //调用其他对象的业务方法
+         public void FileEncrypt(string fileNameSrc, string fileNameDes)
+        {
+            string plainStr = reader.Read(fileNameSrc);
+            string encryptStr = cipher.Encrypt(plainStr);
+            writer.Write(encryptStr, fileNameDes);
+        }
+    }
+Program：客户端测试类
+
+class Program
+    {
+        static void Main(string[] args)
+        {
+            EncryptFacade ef = new EncryptFacade();
+            ef.FileEncrypt("src.txt", "des.txt");
+            Console.Read();
+        }
+    }
+
+
+五、应用场景
+1.要为一个复杂的子系统对外提供一个简单的接口
+2.提供子系统的独立性
+3.客户程序与多个子系统之间存在很大的依赖性
+引入外观类将子系统与客户以及其他子系统解耦，可以提高子系统的独立性和可移植性。
+
+4.在层次化结构中，可以使用外观模式定义系统中每一层的入口
+层与层之间不直接产生联系，而通过外观类建立联系，降低层之间的耦合度。
