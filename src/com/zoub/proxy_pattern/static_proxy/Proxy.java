@@ -1,5 +1,8 @@
 package com.zoub.proxy_pattern.static_proxy;
 
+/**
+ * 步骤3：创建代理对象类（Proxy），即”代购“，并通过代理类创建真实对象实例并访问其方法
+ * */
 public class Proxy implements Subject {
     @Override
     public void buyMac() {
